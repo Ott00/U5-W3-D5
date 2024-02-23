@@ -1,5 +1,6 @@
 package otmankarim.U5W3D5.event;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"participants"})
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

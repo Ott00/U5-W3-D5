@@ -25,7 +25,7 @@ public class UserService {
     }
 
     public User save(UserDTO newUser) {
-        userDAO.findByEmail(newUser.email()).ifPresent(author -> {
+        userDAO.findByEmail(newUser.email()).ifPresent(user -> {
             throw new BadRequestException("L'email " + newUser.email() + " è già in uso!");
         });
         User user = new User(
