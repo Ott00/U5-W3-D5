@@ -41,12 +41,12 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> eventList;
 
-    public User(String name, String surname, String email, String password) {
+    public User(String name, String surname, String email, String password, Role role) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
-        this.role = Role.ORGANIZER;
+        this.role = role;
     }
 
     @Override

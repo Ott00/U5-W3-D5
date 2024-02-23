@@ -32,8 +32,8 @@ public class UserService {
                 newUser.name(),
                 newUser.surname(),
                 newUser.email(),
-                bcrypt.encode(newUser.password())
-//                getRole(newUser.role())
+                bcrypt.encode(newUser.password()),
+                getRole(newUser.role())
         );
         return userDAO.save(user);
     }
@@ -57,8 +57,11 @@ public class UserService {
             case "ORGANIZER":
                 role = Role.ORGANIZER;
                 break;
+            case "ADMIN":
+                role = Role.ADMIN;
+                break;
             default:
-                throw new BadRequestException("this role not exist, roles [NORMAL, ORGANIZER]");
+                throw new BadRequestException("this role not exist, roles [NORMAL, ORGANIZER, ADMIN]");
         }
         return role;
     }
