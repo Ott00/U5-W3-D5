@@ -6,14 +6,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import otmankarim.U5W3D5.exceptions.EventException;
 import otmankarim.U5W3D5.exceptions.NotFoundException;
 import otmankarim.U5W3D5.exceptions.UnauthorizedException;
 import otmankarim.U5W3D5.user.User;
+import otmankarim.U5W3D5.user.UserDAO;
+import otmankarim.U5W3D5.user.UserService;
 
 @Service
 public class EventService {
     @Autowired
     private EventDAO eventDAO;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserDAO userDAO;
 
     public Page<Event> getEvents(int pageNumber, int size, String orderBy) {
         if (size > 100) size = 100;
@@ -56,4 +63,23 @@ public class EventService {
             eventDAO.delete(found);
         } else throw new UnauthorizedException("This event is organized by another user");
     }
+
+    public void addReservation(long id, User user) {
+        Event found = findById(id);
+        if (found.getParticipants().size() < found.getPlacesAvailable()) {
+            found.getParticipants().add(user);
+            eventDAO.save(found);
+        } else throw new EventException("Event is soldout, check another one!");
+    }
 }
+
+
+
+
+
+
+
+
+
+
+

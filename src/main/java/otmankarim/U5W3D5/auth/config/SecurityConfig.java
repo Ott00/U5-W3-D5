@@ -15,12 +15,10 @@ import otmankarim.U5W3D5.auth.JWT.JWTFilter;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-// Se vogliamo dichiarare i permessi di accesso sui singoli endpoints, è OBBLIGATORIA l'annotazione @EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
     private JWTFilter jwtFilter;
 
-    // Bean che mi serve per configurare a piacimento la security filter chain
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         // Disabilitare alcuni comportamenti di default
@@ -31,8 +29,6 @@ public class SecurityConfig {
         // Aggiungere filtri custom
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // Aggiungere/rimuovere determinate regole di protezione per gli endpoint
-        // Qui possiamo determinare se debba essere necessaria un'autenticazione per accedervi
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers("/**").permitAll());
 
         return httpSecurity.build();

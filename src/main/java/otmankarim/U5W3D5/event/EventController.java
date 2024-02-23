@@ -39,6 +39,13 @@ public class EventController {
         return this.eventService.findByIdAndUpdate(id, updateEvent, user);
     }
 
+    @PatchMapping("/{id}/addReservation")
+    @PreAuthorize("hasAuthority('NORMAL')")
+    @ResponseStatus(HttpStatus.CREATED) // Status Code 201
+    public void addReservation(@PathVariable int id, @AuthenticationPrincipal User user) {
+        this.eventService.addReservation(id, user);
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ORGANIZER')")
     @ResponseStatus(HttpStatus.NO_CONTENT) // Status Code 204
