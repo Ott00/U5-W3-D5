@@ -35,14 +35,14 @@ public class EventController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ORGANIZER')")
-    public Event findByIdAndUpdate(@PathVariable int id, @RequestBody EventDTO updateEvent) {
-        return this.eventService.findByIdAndUpdate(id, updateEvent);
+    public Event findByIdAndUpdate(@PathVariable int id, @RequestBody EventDTO updateEvent, @AuthenticationPrincipal User user) {
+        return this.eventService.findByIdAndUpdate(id, updateEvent, user);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ORGANIZER')")
     @ResponseStatus(HttpStatus.NO_CONTENT) // Status Code 204
-    public void findByIdAndDelete(@PathVariable long id) {
-        this.eventService.findByIdAndDelete(id);
+    public void findByIdAndDelete(@PathVariable long id, @AuthenticationPrincipal User user) {
+        this.eventService.findByIdAndDelete(id, user);
     }
 }

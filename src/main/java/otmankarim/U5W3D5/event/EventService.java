@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import otmankarim.U5W3D5.exceptions.NotFoundException;
+import otmankarim.U5W3D5.exceptions.UnauthorizedException;
 import otmankarim.U5W3D5.user.User;
 
 @Service
@@ -36,18 +37,23 @@ public class EventService {
         return eventDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public Event findByIdAndUpdate(long id, EventDTO updateEvent) {
+    public Event findByIdAndUpdate(long id, EventDTO updateEvent, User user) {
         Event found = this.findById(id);
-        found.setTitle(updateEvent.title());
-        found.setDescription(updateEvent.description());
-        found.setDate(updateEvent.date());
-        found.setLocation(updateEvent.location());
-        found.setPlacesAvailable(updateEvent.placesAvailable());
-        return eventDAO.save(found);
+        //Controllo che l'organizzatore dell'evento sia la stessa persona che cerca di modificarlo
+        if (found.getOrganizer().getId().equals(user.getId())) {
+            found.setTitle(updateEvent.title());
+            found.setDescription(updateEvent.description());
+            found.setDate(updateEvent.date());
+            found.setLocation(updateEvent.location());
+            found.setPlacesAvailable(updateEvent.placesAvailable());
+            return eventDAO.save(found);
+        } else throw new UnauthorizedException("This event is organized by another user");
     }
 
-    public void findByIdAndDelete(long id) {
+    public void findByIdAndDelete(long id, User user) {
         Event found = this.findById(id);
-        eventDAO.delete(found);
+        if (found.getOrganizer().getId().equals(user.getId())) {
+            eventDAO.delete(found);
+        } else throw new UnauthorizedException("This event is organized by another user");
     }
 }
